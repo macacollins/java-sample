@@ -86,11 +86,11 @@ The Java application is instrumented using the Micrometer project, which is the 
 
 # Results
 
-![Graph of request counts per response status code](https://github.com/macacollins/java-sample/images/graph1.png)
+![Graph of request counts per response status code](https://github.com/macacollins/java-sample/blob/ca6ee276a5b443e6460f4c3e1d471f1aa8073693/images/graph1.png)
 
 This graph shows the count of successful requests to the three different versions. The results show a steadily increasing number for the memoized `BigInteger` version. However, the numbers are quite messy for the `int` and non-memoized `BigInteger` versions. Many requests never completed, and the containers restarted often due to the strain of computing large Fibonacci values without memoization. The choice here is obvious--memoized `BigInteger` is the winning version according to the data.
 
-![Graph of timing for the fibonacci generation service](https://github.com/macacollins/java-sample/images/graph2.png)
+![Graph of timing for the fibonacci generation service](https://github.com/macacollins/java-sample/blob/ca6ee276a5b443e6460f4c3e1d471f1aa8073693/images/graph2.png)
 
 This metric records a Prometheus `Summary` of the timing of fibonacci generation from the server's point of view. The non-memoized versions didn't even return values after a certain point as they started to fail. The memoized service returned a fairly performant profile with the 99th percentile at 9ms for the 500th sequence item. More testing is needed for higher sequence numbers, but the service is already set up to record metrics.
 
