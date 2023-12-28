@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: synthetic-traffic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      fibonacci-setting: none
+  template:
+    metadata:
+      labels:
+        fibonacci-setting: none
+    spec:
+      containers:
+        - name: traffic-container
+          # Using this container name because it's the base of the fibonacci image
+          image: "gradle:jdk21-jammy"
+          imagePullPolicy: Never
+          env:
+            - name: FIBONACCI_SETTING
+              value: "bigint"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: script-volume
+              mountPath: /home/gradle/make_requests.sh
+              subPath: make_requests.sh
+          command:
+            ["/bin/bash", "make_requests.sh"]
+      volumes:
+        - name: script-volume
+          configMap:
+            name: synthetic-traffic-script
+            items:
+              - key: make_requests.sh
+                path: make_requests.sh
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: synthetic-traffic-script
+data:
+  make_requests.sh: |
+    counter=0
+
+    while true; do
+
+      echo "Making requests with count = $counter"
+      ((counter++))
+
+      if [ $counter -eq 500 ]; then
+          counter=0
+      fi
+
+      # These use & in order to not wait for the results
+      # as they will take quite a while for the higher numbers
+      curl "int-service.default.svc.cluster.local/fibonacci?sequenceNumber=$counter" &
+      curl "bigint-service.default.svc.cluster.local/fibonacci?sequenceNumber=$counter" &
+      curl "bigint-memoized-service.default.svc.cluster.local/fibonacci?sequenceNumber=$counter" &
+      sleep 2
+    done
+

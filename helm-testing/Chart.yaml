@@ -1,0 +1,9 @@
+apiVersion: v2
+name: helm-testing
+description: Some test deployments of the fibonacci application plus a prometheus instance
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.16.0"

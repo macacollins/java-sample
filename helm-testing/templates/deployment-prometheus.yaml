@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: prometheus
+  template:
+    metadata:
+      labels:
+        name: prometheus
+    spec:
+      containers:
+        - name: prometheus-server
+          # The stock prometheus image
+          image: "prom/prometheus"
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: script-volume
+              mountPath: /etc/prometheus
+              #subPath: prometheus.yml
+      volumes:
+        - name: script-volume
+          configMap:
+            name: prometheus-yml-file
+            items:
+              - key: prometheus.yml
+                path: prometheus.yml
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-yml-file
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval:     15s # By default, scrape targets every 15 seconds.
+
+    scrape_configs:
+
+      - job_name: 'prometheus-itself'
+        static_configs:
+          - targets: ['localhost:9090']
+
+      - job_name: 'int'
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: ['int-service.default.svc.cluster.local']
+
+      - job_name: 'bigint'
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: ['bigint-service.default.svc.cluster.local']
+
+      - job_name: 'bigint-memoized'
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: ['bigint-memoized-service.default.svc.cluster.local']
+

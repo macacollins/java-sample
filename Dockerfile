@@ -6,6 +6,8 @@ WORKDIR /home/gradle/sourcecode
 
 ENV FIBONACCI_SETTING bigint-memoized
 
+RUN gradle build
+
 CMD gradle bootRun
 
 
