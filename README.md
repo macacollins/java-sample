@@ -92,7 +92,7 @@ This graph shows the count of successful requests to the three different version
 
 ![Graph of timing for the fibonacci generation service](https://github.com/macacollins/java-sample/blob/ca6ee276a5b443e6460f4c3e1d471f1aa8073693/images/graph2.png)
 
-This metric records a Prometheus `Summary` of the timing of fibonacci generation from the server's point of view. The non-memoized versions didn't even return values after a certain point as they started to fail. The memoized service returned a fairly performant profile with the 99th percentile at 9ms for the 500th sequence item. More testing is needed for higher sequence numbers, but the service is already set up to record metrics.
+This metric records a Prometheus `Summary` of the timing of fibonacci generation from the server's point of view. The non-memoized versions didn't even return values after a certain point as they started to fail. The memoized service returned a fairly performant profile with the 99.9th percentile at 9ms for the 500th sequence item. More testing is needed for higher sequence numbers, but the service is already set up to record metrics.
 
 # Next steps
 
@@ -101,6 +101,7 @@ There are several more things to do here.
 - Finalize the Kubernetes items for the deployment target: Service, Ingress, Route (OpenShift), or other CRD (Service mesh or AWS / Azure / GCP items)
 - Figure out priming or removing recursion to avoid recursion depth errors
 - Unit tests
+- Grafana Dashboards to make metric data more digestible
 - Edge case testing, this primarily measures the happy path
 - For real production, remove the algorithms that aren't chosen
 
