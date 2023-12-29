@@ -148,9 +148,9 @@ This alone could also disqualify the memoized version of the service depending o
 
 The for loop version performs more calculations but stores less in memory than the memoized recursive version. Let's check the difference in CPU usage.
 
-![Graph of memory usage between the for loop and memoized versions](https://github.com/macacollins/java-sample/blob/ca6ee276a5b443e6460f4c3e1d471f1aa8073693/images/graph2.png)
+![Graph of CPU usage between the for loop and memoized versions](images/forloop-memoize-cpu.png)
 
-In this test, the CPU usage of running a JVM and Spring Boot is considerably larger than the cost of running Fibonacci calculations even at the 10,000th sequence item level. So, the graphs are very similar for the two versions. We need further testing using higher sequence numbers and more requests in order to determine the real differences in performance between the for-loop version and memoized recursive version.
+The Prometheus metric `process_cpu_usage` is used here. In this test, the CPU usage of running a JVM and Spring Boot is considerably larger than the cost of running Fibonacci calculations even at the 10,000th sequence item level. So, the graphs are very similar for the two versions. We need further testing using higher sequence numbers and more requests in order to determine the real differences in performance between the for-loop version and memoized recursive version.
 
 # Conclusion
 
