@@ -18,7 +18,7 @@ public class FibonacciFactory {
 
             if (fibonacciSetting == null) {
                 logger.warn("The FIBONACCI_SETTING environment variable was not set. Defaulting to integer generation");
-                logger.warn("FIBONACCI_SETTING environment variable should be one of: bigint, bigint-memoized, or int");
+                logger.warn("FIBONACCI_SETTING environment variable should be one of: bigint, bigint-memoized, bigint-forloop, or int");
                 actualGenerator = new IntegerFibonacciGenerator();
 
                 return actualGenerator;
@@ -32,6 +32,10 @@ public class FibonacciFactory {
                 case "bigint-memoized":
                     logger.info("The FIBONACCI_SETTING environment variable was bigint-memoized. Returning BigIntMemoized generator.");
                     actualGenerator = new BigIntMemoizedFibonacciGenerator();
+                    break;
+                case "bigint-forloop":
+                    logger.info("The FIBONACCI_SETTING environment variable was bigint-forloop. Returning ForLoopFibonacci generator.");
+                    actualGenerator = new ForLoopFibonacciGenerator();
                     break;
                 case "int":
                 default: // get any incorrect values

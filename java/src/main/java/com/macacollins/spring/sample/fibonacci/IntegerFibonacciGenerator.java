@@ -10,9 +10,8 @@ class IntegerFibonacciGenerator implements FibonacciGenerator {
 
     // This method only handles up to the 48th sequence number
     // At that point the result overflows and becomes negative
-    // We could do unsigned to partially extend one
-    // Or long to get up to the 92nd value in the sequence
-    // BigInteger is the way for arbitrary size
+    // We could do long to get up to the 92nd value in the sequence,
+    // but BigInteger is the way for arbitrary size
     public int getFibonacciInt(int sequenceNumber) {
         if (sequenceNumber == 0) {
             return 0;

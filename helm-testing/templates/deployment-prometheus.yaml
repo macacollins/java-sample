@@ -61,3 +61,8 @@ data:
         static_configs:
           - targets: ['bigint-memoized-service.default.svc.cluster.local']
 
+      - job_name: 'bigint-forloop'
+        metrics_path: '/actuator/prometheus'
+        static_configs:
+          - targets: ['bigint-forloop-service.default.svc.cluster.local']
+
