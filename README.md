@@ -130,7 +130,7 @@ While the for loop version does not suffer from stack size limits, we still need
 
 ## Timing
 
-![Graph of timing between the for loop and memoized versions](https://github.com/macacollins/java-sample/blob/ca6ee276a5b443e6460f4c3e1d471f1aa8073693/images/graph2.png)
+![Graph of timing between the for loop and memoized versions](images/forloop-memoize-timing.png)
 
 This graph shows the performance of the memoized `BigInteger` recursive algorithm against the for-loop version of the code. The Prometheus metric resulting from the `@Timed` annotation is used here. Both the for loop and memoized recursive version have similarly performant 99.9 quantile performance at levels up to 10000 sequence items, returning results in under 1 millisecond. Further testing is needed to establish the limits of these services.
 
@@ -138,7 +138,7 @@ This graph shows the performance of the memoized `BigInteger` recursive algorith
 
 The memoized version of the graph trades memory for computation, let's check how much memory it uses. To do this, we will look only at the G1 Survivor space as the Eden space is filled by Spring Boot and collected regularly by the garbage collector. The `HashMap` that stores results, however, stays in the heap and does not get collected as there is a static reference to it in the Factory class.
 
-![Graph of memory usage between the for loop and memoized versions](https://github.com/macacollins/java-sample/blob/ca6ee276a5b443e6460f4c3e1d471f1aa8073693/images/graph2.png)
+![Graph of memory usage between the for loop and memoized versions](images/forloop-memoize-memory.png)
 
 This graph shows the JVM memory usage after quite a bit of usage for both versions of the service. After 10000 sequence items, the memoized version of the service stores about 830kb more data on the heap. This is not that much, but going to the 1,000,000,000th sequence item would require 830gb memory if storage increased linearly, and it doesn't. It would be much worse than that as each sequence item is considerably larger than the previous items. More testing is required to find a practical upper bound where each item becomes prohibitively expensive to store in memory. Another consideration is that this storage is listed per instance of the server, so a Kubernetes cluster running 100 of these will pay the storage cost 100 times.
 
