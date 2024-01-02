@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fibonacci-bigint-forloop
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      fibonacci-setting: bigint-forloop
+  template:
+    metadata:
+      labels:
+        fibonacci-setting: bigint-forloop
+    spec:
+      containers:
+        - name: fibonacci-bigint-forloop
+          # Requires you to run docker build . -t fibonacci-java-sample from the root directory
+          image: "fibonacci-java-sample"
+          imagePullPolicy: Never
+          env:
+            - name: FIBONACCI_SETTING
+              value: "bigint-forloop"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            failureThreshold: 30
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512
