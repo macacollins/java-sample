@@ -3,6 +3,7 @@
 This is a sample microservice using Java and Spring Boot. The application itself calculates Fibonacci values and uses one of four methods based on an environment variable. This functionality was chosen to show an evidence-based approach to making changes. The same methodology of deploying multiple versions of a service and checking logs and metrics is standard debugging practice for real-world services. This document primarily covers the different methods used in the Java applications. There are other documents covering other aspects of the project:
 
 - [Unit Tests](/CORRECTNESS.md)
+- [Deployment](/DEPLOYMENT.md)
 
 # Naive Algorithm
 
