@@ -8,7 +8,7 @@ While performance is important, it's not useful without returning the correct re
 
 As this is a Spring Boot service, JUnit 5 was already included in the project. I wrote tests to check the results of the Fibonacci generators against the known Fibonacci sequence. There is a file `FibonacciNumbers.java` that contains the first 301 sequence elements.
 
-The unit tests for this service are bundled in the Java service so that it can use the same package management and refer to code inside the project. The directory with most of the tests is [here](/java/test/java/com/macacollins/spring/sample/fibonacci).
+The unit tests for this service are bundled in the Java service so that it can use the same package management and refer to code inside the project. The directory with most of the tests is [here](/java/src/test/java/com/macacollins/spring/sample/fibonacci).
 
 Tests for the naive recursive algorithms can take quite a long time with sequence items above 48. For this reason, the tests for BigIntFibonacciGenerator do not test the full 300 sequence items. The memoized version and for loop version both complete 300 items very quickly so the full amount is included.
 
