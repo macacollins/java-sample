@@ -77,7 +77,7 @@ This code uses a `HashMap`, but an `Array`/`ArrayList` could also be used here w
 
 With this code in place, the service can handle quite a few more results. The limit is now in the recursion limit of the JRE, which the code does hit after a few thousand items in the sequence. You can increase the limit by requesting sequence number 500, then 1000, then 1500, etc. to populate the cache and reduce the size of the recursion stack. This example does not manually prime the cache from within the service, but such a thing is possible on startup. Without the recursion stack limitation, the limit becomes memory for cache results. The service should be able to fit many results in a few megabytes as they contain much less data than images, for example.
 
-While testing a version of the traffic script that requesests sequence numbers 200 at a time (200, 400, 600, etc.), the recursion stack limit did not kick in even up to 10000 sequence items. Memoization and recursion works fine as long as you slowly increase the sequence numbers. This is admittedly an unacceptable limitation in the real world. 
+This is a serious limitation as requests with high enough sequence numbers could cause errors. 
 
 # For Loops
 
@@ -116,6 +116,8 @@ This example uses some Kubernetes manifests in a Helm chart to allow testing the
 # Metrics
 
 The Java application is instrumented using the Micrometer project, which is the default for Spring Boot. This worked well out of the box and provided a metrics endpoint under the /actuator/prometheus path. The testing manifests include a deployment for a Prometheus server that scrapes the three deployments and records the metrics. Using `kubectl port-forward` allowed me to check the metrics and how they change over time. This minimal Prometheus setup is used because there is no corporate Kubernetes test cluster with an annotation-based Prometheus lookup. The full configuration details, including the custom prometheus.yml, are included in the `deployment-prometheus.yaml` file.
+
+This version of the traffic script made requests for up to the 500th sequence item.
 
 # Results
 
@@ -158,7 +160,7 @@ At around the 85k sequence item, performance of the forloop version is worse at 
 
 # Conclusion
 
-The for-loop version has only slightly worse performance to the memoized recursive version of the code at the 99.9 quantile at the 10,000 sequence item level. Also, the for loop version does not have the potential to blow the recursion stack and return an error. For this reason, the for-loop version of the code should likely be preferred for the final version of the service. If speed or high sequence numbers are a priority, a hybrid of caching plus for loop may be the winning combination.
+The for-loop version has only slightly worse performance than the memoized recursive version of the code at the 99.9 quantile during the tests. Also, the for loop version does not have the potential to blow the recursion stack and return an error. For this reason, the for-loop version of the code should likely be preferred for the final version of the service. If speed or high sequence numbers are a priority, a hybrid of caching plus for loop may be the winning combination.
 
 # Next steps
 
