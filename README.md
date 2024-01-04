@@ -131,12 +131,6 @@ This metric records a Prometheus `Summary` of the timing of fibonacci generation
 
 While the for loop version does not suffer from stack size limits, we still need to measure performance against the memoized recursive version.
 
-## Timing
-
-![Graph of timing between the for loop and memoized versions](images/forloop-memoize-timing.png)
-
-This graph shows the performance of the memoized `BigInteger` recursive algorithm against the for-loop version of the code. The Prometheus metric resulting from the `@Timed` annotation is used here. Both the for loop and memoized recursive version have similarly performant 99.9 quantile performance at levels up to 10000 sequence items, returning results in under 1 millisecond. Further testing is needed to establish the limits of these services.
-
 ## Memory Usage
 
 The memoized version of the graph trades memory for computation, let's check how much memory it uses. To do this, we will look only at the G1 Survivor space as the Eden space is filled by Spring Boot and collected regularly by the garbage collector. The `HashMap` that stores results, however, stays in the heap and does not get collected as there is a static reference to it in the Factory class.
@@ -171,7 +165,7 @@ The for-loop version has only slightly worse performance to the memoized recursi
 There are several more things to do here.
 
 - Finalize the Kubernetes items for the deployment target: Service, Ingress, Route (OpenShift), or other CRD (Service mesh or AWS / Azure / GCP items)
-- Unit tests
+- Integration tests around the correctness of the HTTP endpoint
 - Grafana Dashboards to make metric data more digestible
 - Edge case testing, this primarily measures the happy path
 - For real production, remove the algorithms that aren't chosen
