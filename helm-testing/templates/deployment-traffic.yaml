@@ -68,9 +68,13 @@ data:
 
       # Second Test
       # Compare the performance of bigint-memoized and bigint-forloop
-      sequenceNumber=$((number * 200))
-      curl "bigint-memoized-service.default.svc.cluster.local/fibonacci?sequenceNumber=$sequenceNumber" &
-      curl "bigint-forloop-service.default.svc.cluster.local/fibonacci?sequenceNumber=$sequenceNumber" &
+      #
+      sequenceNumber=$((number * 800 + {{ $.Values.sequenceOffset }}))
+      for ((i=1; i<={{ $.Values.loadFactor }}; i++)); do
+        curl -s "bigint-memoized-service.default.svc.cluster.local/fibonacci?sequenceNumber=$sequenceNumber" &
+        curl -s "bigint-forloop-service.default.svc.cluster.local/fibonacci?sequenceNumber=$sequenceNumber" &
+      done
+
 
       sleep 2
     done

@@ -1,0 +1,4 @@
+{{- $items := list "int" "bigint" "bigint-forloop" "bigint-memoized" -}}
+{{ range $index, $item := $items }}
+{{ include "test-deployment" $item }}
+{{ end }}

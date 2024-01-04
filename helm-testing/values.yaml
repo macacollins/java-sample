@@ -1,4 +1,2 @@
-resources:
-  requests:
-    cpu: 100m
-    memory: 512
+loadFactor: 100
+sequenceOffset: 5000

@@ -147,17 +147,24 @@ This graph shows the JVM memory usage after quite a bit of usage for both versio
 
 This alone could also disqualify the memoized version of the service depending on requirements for upper bounds.
 
-## CPU usage
+## CPU time at 10,000 sequence items
 
 The for loop version performs more calculations but stores less in memory than the memoized recursive version. Let's check the difference in CPU usage.
 
-![Graph of CPU usage between the for loop and memoized versions](images/forloop-memoize-cpu.png)
+![Graph of CPU usage between the for loop and memoized versions](images/forloop-memoize-cpu-10k.png)
 
-The Prometheus metric `process_cpu_usage` is used here. In this test, the CPU usage of running a JVM and Spring Boot is considerably larger than the cost of running Fibonacci calculations even at the 10,000th sequence item level. So, the graphs are very similar for the two versions. We need further testing using higher sequence numbers and more requests in order to determine the real differences in performance between the for-loop version and memoized recursive version.
+The Prometheus metric `fibonacci_get_seconds` is used here. In this test, the time it takes to run the endpoint is higher at the 99.9th quantile for the bigint-forloop service. This test was performed around the 10,000th sequence item level at about 100 requests per second. At this level, the trade-off of memory for speed and cpu usage starts to appear. 
+
+
+## CPU time at 85,000 sequence items
+
+![Graph of CPU usage between the for loop and memoized versions](images/forloop-memoize-cpu-85k.png)
+
+At around the 85k sequence item, performance of the forloop version is worse at the 99th quantile (blue line) than the memoized version is at 99.9 (brown). It's still only 8ms, but it is several times slower than the memoized one at this point. This indicates that some sort of caching could be useful if speed is the top priority. Maybe every 10th and 10th+1 items, such as 100 and 101, could be cached to save on memory.
 
 # Conclusion
 
-The for-loop version has similar performance to the memoized recursive version of the code at the 3 nines level after priming. Also, the for loop version does not have the potential to blow the recursion stack and return an error. For this reason, the for-loop version of the code should be preferred for the final version of the service.
+The for-loop version has only slightly worse performance to the memoized recursive version of the code at the 99.9 quantile at the 10,000 sequence item level. Also, the for loop version does not have the potential to blow the recursion stack and return an error. For this reason, the for-loop version of the code should likely be preferred for the final version of the service. If speed or high sequence numbers are a priority, a hybrid of caching plus for loop may be the winning combination.
 
 # Next steps
 

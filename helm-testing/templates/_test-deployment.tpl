@@ -1,25 +1,27 @@
+{{ define "test-deployment" }}
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fibonacci-int
+  name: fibonacci-{{/* Just read the . context for now */}}{{ . }}
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      fibonacci-setting: int
-  replicas: 1
+      fibonacci-setting: {{/* Just read the . context for now */}}{{ . }}
   template:
     metadata:
       labels:
-        fibonacci-setting: int
+        fibonacci-setting: {{/* Just read the . context for now */}}{{ . }}
     spec:
       containers:
-        - name: fibonacci-int
+        - name: fibonacci-{{/* Just read the . context for now */}}{{ . }}
           # Requires you to run docker build . -t fibonacci-java-sample from the root directory
           image: "fibonacci-java-sample"
           imagePullPolicy: Never
           env:
             - name: FIBONACCI_SETTING
-              value: "int"
+              value: "{{/* Just read the . context for now */}}{{ . }}"
           ports:
             - name: http
               containerPort: 8080
@@ -39,4 +41,21 @@ spec:
             failureThreshold: 30
             periodSeconds: 10
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            requests:
+              cpu: 100m
+              memory: 512
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{/* Just read the . context for now */}}{{ . }}-service
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    fibonacci-setting: {{/* Just read the . context for now */}}{{ . }}
+{{ end }}
