@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <title>Fibonacci Test Page</title>
+    </head>
+    <body>
+        <h1>Fibonacci Quick Test</h1>
+        <p>This application will make requests to the fibonacci app on the same host.</p>
+        <p>Pick the sequence number below and click the Request button.</p>
+        <input id="sequenceNumber" type="number" value="3"/>
+        <button id="requestButton" type="button">Request</button>
+        <div id="output"></div>
+
+        <script>
+
+            // Function to escape HTML entities
+            // Normally React should be in charge of this
+            function escapeHTML(text) {
+                if (typeof text !== 'string') {
+                    text = String(text);
+                }
+                const map = {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#039;'
+                };
+                return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+            }
+
+            function setError(contents) {
+                const outputElement = document.getElementById('output');
+                outputElement.innerHTML = "Error!\n" + escapeHTML(contents);
+            }
+
+            document.getElementById("requestButton").onclick = function() {
+                // Get the value of the input element with ID sequenceNumber
+                const sequenceNumber = document.getElementById('sequenceNumber').value;
+
+                // Make sure the input is a valid number
+                if (isNaN(sequenceNumber) || sequenceNumber === '') {
+                    setError("Please enter a number in the input box.");
+                    return;
+                }
+
+                // Construct the URL with the parameter sequenceNumber
+                const url = `/fibonacci?sequenceNumber=${sequenceNumber}`;
+
+                // Make a request using fetch
+                fetch(url)
+                    .then(response => {
+                        if (!response.ok) {
+                            setError(response)
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        const outputElement = document.getElementById('output');
+                        outputElement.innerHTML = escapeHTML(data);
+                    })
+                    .catch(error => {
+                        setError(error);
+                    });
+            }
+        </script>
+    </body>
+</html>

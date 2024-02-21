@@ -3,12 +3,10 @@ package com.macacollins.spring.sample;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
 import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.annotation.Timed;
 
 import com.macacollins.spring.sample.fibonacci.FibonacciFactory;
@@ -27,7 +25,7 @@ public class FibonacciController {
     private static final String METRIC_NAME = "fibonacci.status";
 
     // 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, ....
-    // GET is appropriate because this method can be cached
+    // GET is appropriate because this endpoint can be cached
     @GetMapping("/fibonacci")
     @Timed(
             value = "fibonacci.get",

@@ -3,7 +3,9 @@ kind: Deployment
 metadata:
   name: fibonacci-bigint-forloop
 spec:
-  replicas: 1
+  # Bump to 3 to make this service resilient to node failure
+  # TODO consider adding autoscaling
+  replicas: 3
   selector:
     matchLabels:
       fibonacci-setting: bigint-forloop
@@ -14,7 +16,7 @@ spec:
     spec:
       containers:
         - name: fibonacci-bigint-forloop
-          # Requires you to run docker build . -t fibonacci-java-sample from the root directory
+          # Requires you to run docker build . -t fibonacci-java-sample from the project's root directory
           image: "fibonacci-java-sample"
           imagePullPolicy: Never
           env:
