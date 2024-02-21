@@ -2,9 +2,21 @@
 
 For a real application, the deployment phase would involve a CI/CD job to build and publish the image to a container repository. Also, the manifests in kubernetes-manifests directory would need to include some manifests for networking (Service, OpenShift Route, service mesh, etc.). Then, you could deploy the manifests in the kubernetes-manifests directory.
 
-For this sample application, you can run it on Docker Desktop. 
+For this sample application, you can run it on Docker Desktop. Instructions for just Docker and the Docker Desktop Kubernetes are provided below.
 
 # Setting up Docker Desktop
+
+1. First, download Docker Desktop if you don't have it from [this link](https://www.docker.com/products/docker-desktop/) 
+2. Ensure the `docker` command works.
+3. Run the following commands:
+
+```bash
+docker build . -t fibonacci-java-sample
+
+docker run -it -p 8080:8080 -e "FIBONACCI_SETTING=bigint-forloop" fibonacci-java-sample
+```
+
+# Running with Docker Desktop Kubernetes
 
 1. First, download Docker Desktop if you don't have it from [this link](https://www.docker.com/products/docker-desktop/) 
 2. Run the Docker Desktop application

@@ -1,6 +1,11 @@
 <html>
     <head>
         <title>Fibonacci Test Page</title>
+        <style>
+            #output {
+                overflow-wrap: break-word;
+            }
+        </style>
     </head>
     <body>
         <h1>Fibonacci Quick Test</h1>
@@ -13,7 +18,7 @@
         <script>
 
             // Function to escape HTML entities
-            // Normally React should be in charge of this
+            // Normally React or your framework / library of choice should be in charge of this
             function escapeHTML(text) {
                 if (typeof text !== 'string') {
                     text = String(text);
