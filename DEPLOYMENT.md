@@ -16,6 +16,8 @@ docker build . -t fibonacci-java-sample
 docker run -it -p 8080:8080 -e "FIBONACCI_SETTING=bigint-forloop" fibonacci-java-sample
 ```
 
+4. Make requests to localhost:8080/fibonacci?sequenceNumber={yourNumber}, or head to localhost:8080/quick-test.html to access the test webpage.
+
 # Running with Docker Desktop Kubernetes
 
 1. First, download Docker Desktop if you don't have it from [this link](https://www.docker.com/products/docker-desktop/) 
@@ -42,4 +44,3 @@ curl localhost:8080/fibonacci\?sequenceNumber=1000
 ```
 
 ![image showing the port forwarding running](images/port-forwarding.png)
-
