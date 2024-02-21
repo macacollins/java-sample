@@ -18,6 +18,8 @@ docker run -it -p 8080:8080 -e "FIBONACCI_SETTING=bigint-forloop" fibonacci-java
 
 4. Make requests to localhost:8080/fibonacci?sequenceNumber={yourNumber}, or head to localhost:8080/quick-test.html to access the test webpage.
 
+https://github.com/macacollins/java-sample/assets/5402373/534b5d37-f857-4547-8bb0-9afb9fabd504
+
 # Running with Docker Desktop Kubernetes
 
 1. First, download Docker Desktop if you don't have it from [this link](https://www.docker.com/products/docker-desktop/) 
